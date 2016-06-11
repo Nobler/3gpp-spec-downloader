@@ -1,5 +1,3 @@
-# 3GPP_SPEC_DOWNLOAD
-
 ## 0. three download ways
  - sync_download.py:
 Directly download the pdf file using *retrieveFile()* when get its url.
