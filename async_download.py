@@ -43,8 +43,11 @@ def getHtml(url):
     return html
 
 def fetchAllFilesIntoQueue(etsi_type, pool):
+    # optimize: etsi_type just read once
+    html = getHtml(host + etsi_type)
+
     for re_series_main in series:
-        series_path_list = getAllSeriesList(etsi_type, re_series_main)
+        series_path_list = getAllSeriesList(html, etsi_type, re_series_main)
         if series_path_list == []:
             continue
 
@@ -56,9 +59,7 @@ def fetchAllFilesIntoQueue(etsi_type, pool):
 
         enqueueFilePathList(file_path_list, re_series_main, pool)
 
-def getAllSeriesList(etsi_type, re_series_main):
-    html = getHtml(host + etsi_type)
-
+def getAllSeriesList(html, etsi_type, re_series_main):
     re_series_sub = '[0-9]{3}'
 
     re_series_full = '1' + str(re_series_main) + re_series_sub
@@ -77,14 +78,12 @@ def getAllSeriesList(etsi_type, re_series_main):
 
     return series_path_list
     
-
-
 def getSpecNumListOfEachSeries(re_series, series_path_list):
     spec_number_path_list = []
 
     for series_path in series_path_list:
         html = getHtml(host + series_path)
-        # += contain all of spec into list, because series may be deviced into serverl part
+        # += include all of spec in list, because series may be deviced into serverl part
         spec_number_path_list += re.findall(series_path + '[0-9]{6,10}' + '/', html)
 
     if spec_number_path_list != []:
@@ -155,6 +154,7 @@ def retrieveFile(file_full_path, save_to_directory):
 
     if os.path.exists(file_local) == True:
         if remote_file_size != str(os.path.getsize(file_local)):
+            # if file is not downloaded 100%
             os.remove(file_local)
         else:
            log('retrieveFile', file_local + ' is already retrieved.') 
@@ -185,21 +185,6 @@ def get_remote_file_size(url, proxy=None):
         print '%s %s' % (url, e)
     else:
         return dict(response.headers).get('content-length', 0)
-        
-"""
-def getSeriesList(html):
-    reg_begin = '(?:href|HREF)="/'
-    reg_end = '.+?/'
-    url_re = re.compile(reg_begin + series + reg_end)
-    url_list = re.findall(url_re, html)
-
-    for i,url in enumerate(url_list):
-        url_re = re.compile(series + reg_end)
-        url_list[i] = re.findall(url_re, url)[0]
-
-    print url_list
-    return url_list
-"""
 
 def main():
     pool = multiprocessing.Pool(processes = 6)

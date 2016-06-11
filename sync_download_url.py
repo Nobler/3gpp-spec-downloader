@@ -42,7 +42,7 @@ def getHtml(url):
     return html
 
 def fetchAllFiles(etsi_type):
-    # optimizie: etsi_type just read once
+    # optimize: etsi_type just read once
     html = getHtml(host + etsi_type)
 
     for re_series_main in series:

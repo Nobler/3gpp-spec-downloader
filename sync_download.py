@@ -42,8 +42,11 @@ def getHtml(url):
     return html
 
 def fetchAllFiles(etsi_type):
+    # optimize: etsi_type just read once
+    html = getHtml(host + etsi_type)
+
     for re_series_main in series:
-        series_path_list = getAllSeriesList(etsi_type, re_series_main)
+        series_path_list = getAllSeriesList(html, etsi_type, re_series_main)
         if series_path_list == []:
             continue
 
@@ -56,9 +59,7 @@ def fetchAllFiles(etsi_type):
         for file_path in file_path_list:
             retrieveFile(host + file_path, str(re_series_main) + '-series')
 
-def getAllSeriesList(etsi_type, re_series_main):
-    html = getHtml(host + etsi_type)
-
+def getAllSeriesList(html, etsi_type, re_series_main):
     re_series_sub = '[0-9]{3}'
 
     re_series_full = '1' + str(re_series_main) + re_series_sub
@@ -77,14 +78,12 @@ def getAllSeriesList(etsi_type, re_series_main):
 
     return series_path_list
     
-
-
 def getSpecNumListOfEachSeries(re_series, series_path_list):
     spec_number_path_list = []
 
     for series_path in series_path_list:
         html = getHtml(host + series_path)
-        # += contain all of spec into list, because series may be deviced into serverl part
+        # += include all of spec in list, because series may be deviced into serverl part
         spec_number_path_list += re.findall(series_path + '[0-9]{6,10}' + '/', html)
 
     if spec_number_path_list != []:
@@ -151,6 +150,7 @@ def retrieveFile(file_full_path, save_to_directory):
 
     if os.path.exists(file_local) == True:
         if remote_file_size != str(os.path.getsize(file_local)):
+            # if file is not downloaded 100%
             os.remove(file_local)
         else:
            log('retrieveFile', file_local + ' is already retrieved.') 
