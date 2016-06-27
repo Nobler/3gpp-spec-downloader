@@ -1,4 +1,4 @@
-## 0. three download ways
+## Three download ways
  - sync_download.py:
 Directly download the pdf file using *retrieveFile()* when get its url.
  - async_download.py:
@@ -6,14 +6,14 @@ Use ***multiprocessing*** module, call *enqueueFilePathList()* instead of *retri
  - sync_download_url.py (recommended):
 Just save all of pdf files' urls into **url.txt**, then you can download them by following steps, copying urls, opening download software tools, and making a bulk download task.
 
-## 1. set series to download
+## Set series to download
 For default setting, it will download pdf files from 21-series to 37-series:
 ```
 series = range(21, 38)
 ```
 Just change the series to what you want.
 
-## 2.pdf file url schema
+## Pdf file url schema
 eg.
 > 3GPP TS 21.101 version 11.1.0 Release 11
 > http://www.etsi.org/deliver/etsi_ts/121100_121199/121101/11.01.00_60/ts_121101v110100p.pdf
