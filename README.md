@@ -29,3 +29,10 @@ eg.
  - *file*: ts_121101v110100p.pdf, tr_1299980401v090000p.pdf, etc. Consist of etsi_type, spec_number and version.
 
 note: I use *file_path* not *file* to represent the file in code, so there are some redundancy, which need to be optimized.
+
+## reference
+
+- [Specification Numbering](https://www.3gpp.org/specifications/specification-numbering)
+- [3GPP Specification series](https://www.3gpp.org/DynaReport/21-series.htm)
+- [Specification #: 21.101](https://portal.3gpp.org/desktopmodules/Specifications/SpecificationDetails.aspx?specificationId=544)
+- https://www.etsi.org/deliver/etsi_ts/121100_121199/121101/11.01.00_60/
